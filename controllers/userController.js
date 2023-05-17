@@ -1,5 +1,6 @@
 const User = require("../models/userModel");
 const bcryptjs = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 exports.signup = async (req, res) => {
   try {
@@ -50,5 +51,56 @@ exports.signup = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(400).json({ status: "fail", error: err.message });
+  }
+};
+
+exports.login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({
+        status: "fail",
+        error: !email ? "Please provide email!" : "Please provide password!",
+      });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res
+        .status(400)
+        .json({ error: "User with this email does not exist!" });
+    }
+
+    const isMatch = await bcryptjs.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ error: "Incorrect Password." });
+    }
+
+    const token = jwt.sign(
+      {
+        id: user._id,
+        username: user.username,
+        type: user.type,
+        profilePic: user.profilePic,
+        email: user.email,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: process.env.JWT_EXPIRES_IN,
+      }
+    );
+
+    console.log("User logged in successfully!");
+    res.status(200).json({
+      status: "success",
+      user,
+      token,
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "fail",
+      error: error.message,
+    });
   }
 };
