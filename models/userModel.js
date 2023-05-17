@@ -43,6 +43,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "https://i.imgur.com/Eyzrkg3.jpeg",
   },
+  verified: {
+    type: Boolean,
+    default: false,
+  },
   type: {
     type: String,
     default: "manual",
