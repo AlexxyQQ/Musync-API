@@ -1,11 +1,11 @@
 const User = require("../models/userModel");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const verifyUser = require("../middlewares/verify_token");
 
 exports.signup = async (req, res) => {
   try {
-    const { username, email, password, confirmPassword, type, profilePic } =
-      req.body;
+    const { username, email, password, confirmPassword, type } = req.body;
     let errorMessage = "";
 
     if (!username || !email || !password || !confirmPassword) {
@@ -15,10 +15,6 @@ exports.signup = async (req, res) => {
       if (!password) errorMessage += "Password, ";
       if (!confirmPassword) errorMessage += "Confirm Password, ";
       errorMessage = errorMessage.slice(0, -2) + "!";
-    }
-
-    if (errorMessage) {
-      return res.status(400).json({ stauts: false, message: errorMessage });
     }
 
     const existingUserEmail = await User.findOne({ email });
@@ -33,7 +29,9 @@ exports.signup = async (req, res) => {
     }
 
     if (errorMessage) {
-      return res.status(400).json({ stauts: false, message: errorMessage });
+      console.log(errorMessage);
+
+      return res.status(400).json({ success: false, message: errorMessage });
     }
 
     const hashedPassword = await bcryptjs.hash(password, 12);
@@ -42,19 +40,18 @@ exports.signup = async (req, res) => {
       email,
       password: hashedPassword,
       type,
-      profilePic,
     });
 
     user = await user.save();
     console.log(user);
-    res.json({
+    res.status(200).json({
       success: true,
       data: user,
       message: "User created successfully!",
     });
   } catch (err) {
     console.log(err);
-    res.status(400).json({ status: false, message: err.message });
+    res.status(400).json({ success: false, message: err.message });
   }
 };
 
@@ -64,7 +61,7 @@ exports.login = async (req, res) => {
 
     if (!email || !password) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: !email ? "Please provide email!" : "Please provide password!",
       });
     }
@@ -72,8 +69,8 @@ exports.login = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({
-        status: false,
-        messag: "User with this email does not exist!",
+        success: false,
+        message: "User with this email does not exist!",
       });
     }
 
@@ -81,7 +78,7 @@ exports.login = async (req, res) => {
     if (!isMatch) {
       return res
         .status(400)
-        .json({ status: false, messag: "Incorrect Password." });
+        .json({ success: false, message: "Incorrect Password." });
     }
 
     const token = jwt.sign(
@@ -100,13 +97,33 @@ exports.login = async (req, res) => {
 
     console.log("User logged in successfully!");
     res.status(200).json({
-      status: true,
+      success: true,
       data: { user, token },
       message: "User logged in successfully!",
     });
   } catch (error) {
     res.status(400).json({
-      status: false,
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+exports.loginWithToken = async (req, res) => {
+  try {
+    const user = await User.findOne({ email: res.locals.user["email"] });
+    console.log(user);
+    res.json({
+      success: true,
+      data: {
+        user,
+        token: res.locals.token,
+      },
+      message: "User logged in successfully!",
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
       message: error.message,
     });
   }

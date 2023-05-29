@@ -5,19 +5,20 @@ function verifyUser(req, res, next) {
   try {
     // Get token from request header
     const token = req.headers.authorization.split(" ")[1];
+    console.log(req.headers.authorization);
 
     if (!token) {
       // Token not found
       return res
         .status(403)
-        .json({ stauts: false, message: "Access denied. No token provided." });
+        .json({ success: false, message: "Access denied. No token provided." });
     }
     var decoded = jwt.verify(token, process.env.JWT_SECRET);
     res.locals.user = decoded;
     res.locals.token = token;
     next();
   } catch (err) {
-    return res.status(401).json({ stauts: false, message: "Unauthorized" });
+    return res.status(401).json({ success: false, message: "Unauthorized" });
   }
 }
 
@@ -28,16 +29,16 @@ function verifyAPIReq(req, res, next) {
       // Token not found
       return res
         .status(403)
-        .json({ stauts: false, message: "Access denied. No token provided." });
+        .json({ success: false, message: "Access denied. No token provided." });
     }
     if (apiSecret !== process.env.API_SECRET) {
       return res
         .status(403)
-        .json({ stauts: false, message: "Access denied. Invalid token." });
+        .json({ success: false, message: "Access denied. Invalid token." });
     }
     next();
   } catch (err) {
-    return res.status(401).json({ stauts: false, message: "Unauthorized" });
+    return res.status(401).json({ success: false, message: "Unauthorized" });
   }
 }
 
