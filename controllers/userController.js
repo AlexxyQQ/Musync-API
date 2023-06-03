@@ -35,20 +35,36 @@ exports.signup = async (req, res) => {
     }
 
     const hashedPassword = await bcryptjs.hash(password, 12);
-    let user = new User({
-      username,
-      email,
-      password: hashedPassword,
-      type,
-    });
-
-    user = await user.save();
-    console.log(user);
-    res.status(200).json({
-      success: true,
-      data: user,
-      message: "User created successfully!",
-    });
+    if (req.body.profilePic) {
+      let user = new User({
+        username,
+        email,
+        password: hashedPassword,
+        type,
+        profilePic: req.body.profilePic,
+      });
+      user = await user.save();
+      console.log(user);
+      res.status(200).json({
+        success: true,
+        data: user,
+        message: "User created successfully!",
+      });
+    } else {
+      let user = new User({
+        username,
+        email,
+        password: hashedPassword,
+        type,
+      });
+      user = await user.save();
+      console.log(user);
+      res.status(200).json({
+        success: true,
+        data: user,
+        message: "User created successfully!",
+      });
+    }
   } catch (err) {
     console.log(err);
     res.status(400).json({ success: false, message: err.message });
