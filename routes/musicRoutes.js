@@ -5,7 +5,7 @@ const { verifyUser } = require("../middlewares/verify_token");
 
 const musicRouter = express.Router();
 
-musicRouter.route("/upload").post(verifyUser, musicController.uploadFile);
-musicRouter.route("/files").get(verifyUser, musicController.files);
+musicRouter.route("/uploadSongs").post(verifyUser, musicController.uploadSongs);
+musicRouter.route("/getSongs").get(verifyUser, musicController.getSongs);
 
 module.exports = musicRouter;

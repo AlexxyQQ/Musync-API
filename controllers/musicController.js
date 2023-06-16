@@ -5,7 +5,7 @@ const Song = require("../models/songModel");
 const upload = multer({ dest: "uploads/" });
 const folderPath = "uploads";
 
-exports.uploadFile = (req, res, next) => {
+exports.uploadSongs = (req, res, next) => {
   const user_data = res.locals.user;
   upload.single("files")(req, res, async (err) => {
     if (err) {
@@ -43,6 +43,7 @@ exports.uploadFile = (req, res, next) => {
       const additionalPath = subFoldersToAdd.join("/");
 
       const uploadPath = path.join(uploadPathTemp, additionalPath);
+      removeFilesInDirectory(uploadPath);
 
       if (!fs.existsSync(uploadPath)) {
         fs.mkdirSync(uploadPath, { recursive: true });
@@ -145,7 +146,7 @@ async function findMP3Files(directoryPath) {
   return mp3Files;
 }
 
-exports.files = async (req, res, next) => {
+exports.getSongs = async (req, res, next) => {
   try {
     const user_data = res.locals.user;
     const folderPath = `./uploads`;
