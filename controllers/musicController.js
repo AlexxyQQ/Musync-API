@@ -5,13 +5,15 @@ const Song = require("../models/songModel");
 const upload = multer({ dest: "uploads/" });
 const folderPath = "uploads";
 
-exports.uploadSongs = (req, res, next) => {
+exports.addSongs = (req, res, next) => {
   const user_data = res.locals.user;
   upload.single("files")(req, res, async (err) => {
     if (err) {
       console.error(err);
-      err.httpStatusCode = 400;
-      return next(err);
+      return res.status(400).json({
+        success: false,
+        message: err,
+      });
     }
 
     try {
@@ -20,13 +22,22 @@ exports.uploadSongs = (req, res, next) => {
       const file = req.file;
 
       if (!file) {
-        throw new Error("Please choose a file");
+        return res.status(400).json({
+          success: false,
+          message: "Please choose a file",
+        });
       }
       if (!mainFolder) {
-        throw new Error("Please choose the main folder");
+        return res.status(400).json({
+          success: false,
+          message: "Please choose the main folder",
+        });
       }
       if (!subFolder) {
-        throw new Error("Please choose the sub folder");
+        return res.status(400).json({
+          success: false,
+          message: "Please choose the sub folder",
+        });
       }
 
       const folderPath = `uploads`;
@@ -43,7 +54,6 @@ exports.uploadSongs = (req, res, next) => {
       const additionalPath = subFoldersToAdd.join("/");
 
       const uploadPath = path.join(uploadPathTemp, additionalPath);
-      removeFilesInDirectory(uploadPath);
 
       if (!fs.existsSync(uploadPath)) {
         fs.mkdirSync(uploadPath, { recursive: true });
@@ -94,15 +104,17 @@ exports.uploadSongs = (req, res, next) => {
       } else {
         fs.unlinkSync(file.path); // Delete the uploaded file if it already exists
       }
-      removeFilesInDirectory("./uploads");
+
       return res.status(200).json({
         success: true,
         message: "File uploaded successfully",
       });
     } catch (error) {
       console.error(error);
-      error.httpStatusCode = 400;
-      return next(error);
+      return res.status(400).json({
+        success: false,
+        message: "File uploaded Failed",
+      });
     }
   });
 };
@@ -137,7 +149,10 @@ async function findMP3Files(directoryPath) {
         var song = await Song.findOne({
           serverUrl: filePath.replace(/\\/g, "/"),
         });
-        mp3Files.push(song);
+
+        if (song !== null) {
+          mp3Files.push(song);
+        }
       }
     }
   }
@@ -146,11 +161,34 @@ async function findMP3Files(directoryPath) {
   return mp3Files;
 }
 
-exports.getSongs = async (req, res, next) => {
+exports.getAllSongs = async (req, res, next) => {
   try {
     const user_data = res.locals.user;
     const folderPath = `./uploads`;
-    const fileData = [];
+
+    // const allFiles = await readFilesRecursive(folderPath, fileData); // Call recursive function and get the updated file data
+    const allFiles = await findMP3Files(folderPath); // Call recursive function and get the updated file data
+    console.log(allFiles);
+
+    return res.status(200).json({
+      success: true,
+      data: allFiles,
+      message: `Fetched all files of ${user_data["username"]}`,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to retrieve file data",
+      data: {},
+    });
+  }
+};
+
+exports.getAllFolders = async (req, res, next) => {
+  try {
+    const user_data = res.locals.user;
+    const folderPath = `./uploads/${user_data.username}`;
 
     // const allFiles = await readFilesRecursive(folderPath, fileData); // Call recursive function and get the updated file data
     const allFiles = await findMP3Files(folderPath); // Call recursive function and get the updated file data
