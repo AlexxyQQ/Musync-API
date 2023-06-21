@@ -1,11 +1,10 @@
 const fs = require("fs");
 const multer = require("multer");
 const path = require("path");
-const Song = require("../models/songModel");
+const Song = require("../../models/songModel");
 const upload = multer({ dest: "uploads/" });
-const folderPath = "uploads";
 
-exports.addSongs = (req, res, next) => {
+function addAllSongs(req, res, next) {
   const user_data = res.locals.user;
   upload.single("files")(req, res, async (err) => {
     if (err) {
@@ -65,6 +64,8 @@ exports.addSongs = (req, res, next) => {
       );
 
       const existingFile = await Song.findOne({ serverUrl: filePath });
+
+      // If the file is not in the database, save it and add to the system
       if (!existingFile) {
         await fs.promises.writeFile(
           filePath,
@@ -99,10 +100,28 @@ exports.addSongs = (req, res, next) => {
           title: songModelMap.title,
           track: songModelMap.track,
           uri: songModelMap.uri,
+          albumArt: songModelMap.albumArt,
+          albumArtUrl: filePath.replace("mp3", "png"),
         });
-        songModel = await songModel.save();
+
+        try {
+          songModel = await songModel.save();
+          // save the album art in the system using multer
+        } catch (error) {
+          // Handle duplicate song ID error
+          console.error(error);
+          fs.unlinkSync(filePath); // Delete the newly created file
+          next();
+        }
       } else {
-        fs.unlinkSync(file.path); // Delete the uploaded file if it already exists
+        // If the file is in the database but not in the system, add it to the system
+        if (!fs.existsSync(filePath)) {
+          await fs.promises.writeFile(
+            filePath,
+            await fs.promises.readFile(file.path)
+          );
+        }
+        fs.unlinkSync(file.path); // Delete the uploaded file
       }
 
       return res.status(200).json({
@@ -113,98 +132,10 @@ exports.addSongs = (req, res, next) => {
       console.error(error);
       return res.status(400).json({
         success: false,
-        message: "File uploaded Failed",
+        message: "File upload failed",
       });
     }
   });
-};
-
-function removeFilesInDirectory(directoryPath) {
-  const files = fs.readdirSync(directoryPath);
-
-  files.forEach((file) => {
-    const filePath = path.join(directoryPath, file);
-    const fileStat = fs.statSync(filePath);
-
-    if (fileStat.isFile()) {
-      fs.unlinkSync(filePath);
-      console.log(`Deleted file: ${filePath}`);
-    }
-  });
 }
 
-async function findMP3Files(directoryPath) {
-  const mp3Files = [];
-
-  async function traverseDirectory(dir) {
-    const files = fs.readdirSync(dir);
-
-    for (const file of files) {
-      const filePath = path.join(dir, file);
-      const fileStat = fs.statSync(filePath);
-
-      if (fileStat.isDirectory()) {
-        await traverseDirectory(filePath); // Recursively traverse subdirectories
-      } else if (path.extname(filePath).toLowerCase() === ".mp3") {
-        var song = await Song.findOne({
-          serverUrl: filePath.replace(/\\/g, "/"),
-        });
-
-        if (song !== null) {
-          mp3Files.push(song);
-        }
-      }
-    }
-  }
-
-  await traverseDirectory(directoryPath);
-  return mp3Files;
-}
-
-exports.getAllSongs = async (req, res, next) => {
-  try {
-    const user_data = res.locals.user;
-    const folderPath = `./uploads`;
-
-    // const allFiles = await readFilesRecursive(folderPath, fileData); // Call recursive function and get the updated file data
-    const allFiles = await findMP3Files(folderPath); // Call recursive function and get the updated file data
-    console.log(allFiles);
-
-    return res.status(200).json({
-      success: true,
-      data: allFiles,
-      message: `Fetched all files of ${user_data["username"]}`,
-    });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({
-      success: false,
-      message: "Failed to retrieve file data",
-      data: {},
-    });
-  }
-};
-
-exports.getAllFolders = async (req, res, next) => {
-  try {
-    const user_data = res.locals.user;
-    const folderPath = `./uploads/${user_data.username}`;
-
-    // const allFiles = await readFilesRecursive(folderPath, fileData); // Call recursive function and get the updated file data
-    const allFiles = await findMP3Files(folderPath); // Call recursive function and get the updated file data
-    console.log(allFiles);
-
-    return res.status(200).json({
-      success: true,
-      data: allFiles,
-      message: `Fetched all files of ${user_data["username"]}`,
-    });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({
-      success: false,
-      message: "Failed to retrieve file data",
-      data: {},
-    });
-  }
-};
+module.exports = addAllSongs;

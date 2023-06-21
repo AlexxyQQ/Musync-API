@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 
 const songSchema = new mongoose.Schema({
-  id: { type: Number, required: true },
-  serverUrl: { type: String, required: true },
+  id: { type: Number, required: true, unique: true },
+  serverUrl: { type: String, required: true, unique: true },
   data: { type: String },
   uri: { type: String },
   displayName: { type: String },
@@ -28,6 +28,8 @@ const songSchema = new mongoose.Schema({
   isNotification: { type: Boolean },
   isPodcast: { type: Boolean },
   isRingtone: { type: Boolean },
+  albumArt: { type: String },
+  albumArtUrl: { type: String },
 });
 
 const song = mongoose.model("Songs", songSchema);
