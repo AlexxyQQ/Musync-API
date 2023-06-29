@@ -17,7 +17,6 @@ function addAllSongs(req, res, next) {
 
     try {
       const { mainFolder, subFolder, songModelMap } = req.body;
-      console.log(songModelMap);
       const file = req.file;
 
       if (!file) {

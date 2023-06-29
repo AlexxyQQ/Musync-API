@@ -45,7 +45,6 @@ async function findMP3Files(directoryPath) {
   }
 
   await traverseDirectory(directoryPath);
-  console.log(mp3Files.length);
   // save it in a json file
 
   return mp3Files;

@@ -61,8 +61,6 @@ function uploadAlbumArt(req, res, next) {
         subFolderPathSplit[subFolderPathSplit.length - 1]
       );
 
-      console.log(filePath);
-
       // If the file is in the database but not in the system, add it to the system
       if (!fs.existsSync(filePath)) {
         await fs.promises.writeFile(

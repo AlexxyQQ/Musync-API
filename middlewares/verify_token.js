@@ -5,7 +5,6 @@ function verifyUser(req, res, next) {
   try {
     // Get token from request header
     const token = req.headers.authorization.split(" ")[1];
-    console.log(req.headers.authorization);
 
     if (!token) {
       // Token not found

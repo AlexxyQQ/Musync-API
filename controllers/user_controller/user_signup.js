@@ -27,8 +27,6 @@ async function signup(req, res) {
     }
 
     if (errorMessage) {
-      console.log(errorMessage);
-
       return res.status(400).json({ success: false, message: errorMessage });
     }
 
@@ -42,7 +40,6 @@ async function signup(req, res) {
         profilePic: req.body.profilePic,
       });
       user = await user.save();
-      console.log(user);
       res.status(200).json({
         success: true,
         data: user,
@@ -56,7 +53,6 @@ async function signup(req, res) {
         type,
       });
       user = await user.save();
-      console.log(user);
       res.status(200).json({
         success: true,
         data: user,
@@ -64,7 +60,6 @@ async function signup(req, res) {
       });
     }
   } catch (err) {
-    console.log(err);
     res.status(400).json({ success: false, message: err.message });
   }
 }

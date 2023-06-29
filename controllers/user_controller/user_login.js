@@ -42,10 +42,9 @@ async function login(req, res) {
       }
     );
 
-    console.log("User logged in successfully!");
     res.status(200).json({
       success: true,
-      data: { user, token },
+      data: { user, token: token },
       message: "User logged in successfully!",
     });
   } catch (error) {

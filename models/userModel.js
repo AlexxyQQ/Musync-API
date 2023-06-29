@@ -49,6 +49,7 @@ const userSchema = new mongoose.Schema({
   },
   type: {
     type: String,
+    enum: ["manual", "google"],
     default: "manual",
   },
 });

@@ -2,8 +2,13 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 const app = require("./app");
 
+var db_URI =
+  process.env.NODE_ENV === "test"
+    ? process.env.TEST_DATABASE
+    : process.env.PRO_DATABASE;
+
 mongoose
-  .connect(process.env.DATABASE, {
+  .connect(db_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
