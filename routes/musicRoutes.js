@@ -23,7 +23,7 @@ musicRouter
   .get(verifyUser, musicController.getAllFolders);
 musicRouter
   .route("/getFolderSongs")
-  .get(verifyUser, musicController.getFolderSongs);
+  .post(verifyUser, musicController.getFolderSongs);
 musicRouter.route("/addFolders").post(verifyUser, musicController.addFolders);
 
 // All Artists

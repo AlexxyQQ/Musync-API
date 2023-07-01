@@ -20,16 +20,31 @@ async function getAllAlbums(req, res, next) {
 
     // get all albums
     // if album is not available then make it as unknown
+    //  albums.push({
+    //   id: song.albumId,
+    //   album: song.album,
+    //   artist: song.artist,
+    //   artistId: song.artistId,
+    //   numOfSongs: numOfSongs,
+    // });
 
     const albums = [];
     songs.forEach((song) => {
-      if (song.album === "") {
-        song.album = "Unknown";
-      }
-      if (!albums.includes(song.album)) {
-        albums.push(song.album);
+      let album = albums.find((album) => album.id === song.albumId);
+      if (!album) {
+        albums.push({
+          id: song.albumId,
+          album: song.album,
+          artist: song.artist,
+          artistId: song.artistId,
+          numOfSongs: 1,
+        });
+      } else {
+        album.numOfSongs += 1;
       }
     });
+
+    console.log(albums.length);
 
     res.status(200).json({
       success: true,

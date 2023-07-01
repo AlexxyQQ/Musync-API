@@ -2,7 +2,7 @@ const fs = require("fs");
 const multer = require("multer");
 const path = require("path");
 const Song = require("../../models/songModel");
-const upload = multer({ dest: "uploads/" });
+const upload = multer({ dest: "public/uploads/" });
 
 function addAllSongs(req, res, next) {
   const user_data = res.locals.user;
@@ -38,7 +38,7 @@ function addAllSongs(req, res, next) {
         });
       }
 
-      const folderPath = `uploads`;
+      const folderPath = `public/uploads/`;
       var uploadPathTemp = path.join(
         folderPath,
         user_data["username"],

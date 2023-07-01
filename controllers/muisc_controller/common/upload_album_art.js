@@ -1,7 +1,7 @@
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
-const upload = multer({ dest: "uploads/" });
+const upload = multer({ dest: "public/uploads/" });
 
 function uploadAlbumArt(req, res, next) {
   const user_data = res.locals.user;
@@ -37,7 +37,7 @@ function uploadAlbumArt(req, res, next) {
         });
       }
 
-      const folderPath = `uploads`;
+      const folderPath = `public/uploads/`;
       var uploadPathTemp = path.join(
         folderPath,
         user_data["username"],

@@ -6,7 +6,7 @@ const { findMP3Files } = require("./common/find_song");
 async function getAllSongs(req, res, next) {
   try {
     const user_data = res.locals.user;
-    const folderPath = `./uploads/${user_data.username}`;
+    const folderPath = `./public/uploads//${user_data.username}`;
 
     if (fs.existsSync(folderPath)) {
       const gotFiles = await findMP3Files(folderPath);
