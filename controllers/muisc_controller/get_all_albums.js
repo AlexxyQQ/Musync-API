@@ -14,7 +14,7 @@ async function getAllAlbums(req, res, next) {
     // check if the songs are in the server
     songs.forEach((song) => {
       if (!fs.existsSync(song.serverUrl)) {
-        song.remove();
+        song.deleteOne();
       }
     });
 
@@ -43,8 +43,6 @@ async function getAllAlbums(req, res, next) {
         album.numOfSongs += 1;
       }
     });
-
-    console.log(albums.length);
 
     res.status(200).json({
       success: true,

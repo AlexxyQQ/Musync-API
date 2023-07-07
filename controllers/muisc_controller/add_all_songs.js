@@ -71,6 +71,11 @@ function addAllSongs(req, res, next) {
           await fs.promises.readFile(file.path)
         );
         fs.unlinkSync(file.path);
+
+        const filePathSplit = filePath.split("\\");
+        filePathSplit[filePathSplit.length - 1] = `${songModelMap.id}` + ".png";
+        const newFilePath = filePathSplit.join("\\");
+
         let songModel = new Song({
           id: songModelMap.id,
           serverUrl: filePath.replace(/\\/g, "/"),
@@ -100,7 +105,7 @@ function addAllSongs(req, res, next) {
           track: songModelMap.track,
           uri: songModelMap.uri,
           albumArt: songModelMap.albumArt,
-          albumArtUrl: filePath.replace("mp3", "png"),
+          albumArtUrl: newFilePath,
         });
 
         try {
@@ -110,7 +115,10 @@ function addAllSongs(req, res, next) {
           // Handle duplicate song ID error
           console.error(error);
           fs.unlinkSync(filePath); // Delete the newly created file
-          next();
+          return res.status(400).json({
+            success: false,
+            message: "File upload failed",
+          });
         }
       } else {
         // If the file is in the database but not in the system, add it to the system

@@ -31,6 +31,7 @@ function verifyAPIReq(req, res, next) {
         .json({ success: false, message: "Access denied. No token provided." });
     }
     if (apiSecret !== process.env.API_SECRET) {
+      console.log(apiSecret, process.env.API_SECRET);
       return res
         .status(403)
         .json({ success: false, message: "Access denied. Invalid token." });

@@ -25,14 +25,13 @@ async function getFolderSongs(req, res, next) {
     // check if the songs are in the server
     songs.forEach((song) => {
       if (!fs.existsSync(song.serverUrl)) {
-        song.remove();
+        song.deleteOne();
       }
     });
 
     // get songs in the folderurl
     const folderSongs = songs.filter((song) => {
       const folder = path.dirname(song.serverUrl);
-      console.log(folder, folderUrl);
       return folder === folderUrl;
     });
 

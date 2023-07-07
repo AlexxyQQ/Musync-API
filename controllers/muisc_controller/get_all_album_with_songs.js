@@ -14,7 +14,7 @@ async function getAllAlbumWithSongs(req, res, next) {
     // check if the songs are in the server
     songs.forEach((song) => {
       if (!fs.existsSync(song.serverUrl)) {
-        song.remove();
+        song.deleteOne();
       }
     });
 

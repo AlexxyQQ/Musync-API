@@ -15,7 +15,7 @@ function uploadAlbumArt(req, res, next) {
     }
 
     try {
-      const { mainFolder, subFolder } = req.body;
+      const { mainFolder, subFolder, songId } = req.body;
       const file = req.file;
 
       if (!file) {
