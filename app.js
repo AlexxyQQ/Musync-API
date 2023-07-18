@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const path = require("path");
 const mongoose = require("mongoose");
+const cors = require("cors");
 require("dotenv").config();
 
 const userRoutes = require("./routes/userRoute");
@@ -10,6 +11,7 @@ const musicRouter = require("./routes/musicRoutes");
 const verify = require("./middlewares/verify_token");
 
 const app = express(); // create express app
+app.use(cors({ origin: true }));
 
 var db_URI =
   process.env.NODE_ENV === "test"
