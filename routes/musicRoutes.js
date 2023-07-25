@@ -13,6 +13,8 @@ musicRouter.route("/addAllSongs").post(verifyUser, musicController.addAllSongs);
 
 musicRouter.route("/getAllSongs").get(verifyUser, musicController.getAllSongs);
 
+musicRouter.route("/getAllPublicSongs").get(musicController.getAllPublicSongs);
+
 // All Folders
 musicRouter
   .route("/getAllFolderWithSongs")
@@ -50,5 +52,9 @@ musicRouter
 musicRouter
   .route("/getPlaylists")
   .get(verifyUser, musicController.getPlaylists);
+
+musicRouter
+  .route("/tooglePublic")
+  .post(verifyUser, musicController.togglePublic);
 
 module.exports = musicRouter;

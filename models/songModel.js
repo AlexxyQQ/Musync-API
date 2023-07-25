@@ -30,6 +30,7 @@ const songSchema = new mongoose.Schema({
   isRingtone: { type: Boolean },
   albumArt: { type: String },
   albumArtUrl: { type: String },
+  isPublic: { type: Boolean, default: false },
 });
 
 const song = mongoose.model("Songs", songSchema);

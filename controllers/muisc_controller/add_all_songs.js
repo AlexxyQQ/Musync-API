@@ -106,6 +106,7 @@ function addAllSongs(req, res, next) {
           uri: songModelMap.uri,
           albumArt: songModelMap.albumArt,
           albumArtUrl: newFilePath,
+          isPublic: songModelMap.isPublic,
         });
 
         try {

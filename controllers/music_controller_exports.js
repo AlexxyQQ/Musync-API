@@ -1,3 +1,4 @@
+const getAllPublicSongs = require("../controllers/muisc_controller/get_all_public_songs");
 const getAllSongs = require("../controllers/muisc_controller/get_all_songs");
 const addAllSongs = require("../controllers/muisc_controller/add_all_songs");
 const getAllFolderWithSongs = require("./muisc_controller/get_all_folder_with_songs");
@@ -12,10 +13,12 @@ const getAllAlbumWithSongs = require("../controllers/muisc_controller/get_all_al
 const addToPlaylist = require("../controllers/muisc_controller/add_to_playlist");
 const createPlaylist = require("../controllers/muisc_controller/create_playlist");
 const getPlaylists = require("../controllers/muisc_controller/get_playlists");
+const togglePublic = require("../controllers/muisc_controller/toggle_public");
 
 module.exports = {
   uploadAlbumArt,
   getAllSongs,
+  getAllPublicSongs,
   addAllSongs,
   getAllFolderWithSongs,
   getAllFolders,
@@ -28,4 +31,5 @@ module.exports = {
   addToPlaylist,
   createPlaylist,
   getPlaylists,
+  togglePublic,
 };
