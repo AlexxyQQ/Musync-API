@@ -57,4 +57,64 @@ musicRouter
   .route("/tooglePublic")
   .post(verifyUser, musicController.togglePublic);
 
+const io = require("socket.io")(3002, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+  },
+});
+// io.on("connection", (socket) => {
+//   const user = socket.handshake.query.userEmail;
+//   const uid = socket.handshake.query.uid;
+//   socket.join(user);
+//   socket.on("shared", (data) => {
+//     io.to(user).emit("shared-song", data);
+//   });
+//   socket.on("disconnect", () => {
+//     socket.leave(user);
+//   });
+// });
+
+const userRooms = {};
+
+io.on("connection", (socket) => {
+  const userEmail = socket.handshake.query.userEmail;
+  const uid = socket.handshake.query.uid;
+
+  // Create or join the room for the userEmail
+  socket.join(userEmail);
+
+  // Store the user's socket in the room object for that userEmail
+  if (!userRooms[userEmail]) {
+    userRooms[userEmail] = [socket];
+  } else {
+    userRooms[userEmail].push(socket);
+  }
+
+  socket.on("shared", (data) => {
+    // Broadcast the data to all sockets in the userEmail room except the one with the same uid
+    const socketsInRoom = userRooms[userEmail];
+    for (const roomSocket of socketsInRoom) {
+      if (
+        roomSocket.id !== socket.id &&
+        roomSocket.handshake.query.uid !== uid
+      ) {
+        roomSocket.emit("shared-song", data);
+      }
+    }
+  });
+
+  socket.on("disconnect", () => {
+    // Remove the socket from the room object when the user disconnects
+    if (userRooms[userEmail]) {
+      userRooms[userEmail] = userRooms[userEmail].filter(
+        (roomSocket) => roomSocket.id !== socket.id
+      );
+      if (userRooms[userEmail].length === 0) {
+        delete userRooms[userEmail];
+      }
+    }
+  });
+});
+
 module.exports = musicRouter;

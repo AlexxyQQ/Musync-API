@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const path = require("path");
 const mongoose = require("mongoose");
 const cors = require("cors");
+
 require("dotenv").config();
 
 const userRoutes = require("./routes/userRoute");
