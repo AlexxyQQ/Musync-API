@@ -17,7 +17,6 @@ async function getAllPublicSongs(req, res, next) {
       data: uniqueSongs,
     });
   } catch (error) {
-    console.error(error);
     return res.status(500).json({
       success: false,
       message: "Failed to retrieve file data",

@@ -108,7 +108,6 @@ function addAllSongs(req, res, next) {
           albumArtUrl: newFilePath,
           isPublic: songModelMap.isPublic,
         });
-
         try {
           songModel = await songModel.save();
           // save the album art in the system using multer

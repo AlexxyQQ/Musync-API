@@ -6,13 +6,12 @@ const { findMP3Files } = require("./common/find_song");
 async function getAllSongs(req, res, next) {
   try {
     const user_data = res.locals.user;
-    const folderPath = `./public/uploads//${user_data.username}`;
+    const folderPath = `./public/uploads/${user_data.username}`;
 
     if (fs.existsSync(folderPath)) {
       const gotFiles = await findMP3Files(folderPath);
 
       const allFiles = [];
-
       for (const file of gotFiles) {
         const songExists = await Song.findOne({ serverUrl: file.serverUrl });
 
@@ -41,7 +40,6 @@ async function getAllSongs(req, res, next) {
       });
     }
   } catch (error) {
-    console.error(error);
     return res.status(500).json({
       success: false,
       message: "Failed to retrieve file data",

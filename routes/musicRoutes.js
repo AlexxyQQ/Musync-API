@@ -1,6 +1,7 @@
 const express = require("express");
 const musicController = require("../controllers/music_controller_exports");
 const { verifyUser } = require("../middlewares/verify_token");
+const io = require("../socket");
 
 const musicRouter = express.Router();
 
@@ -56,24 +57,6 @@ musicRouter
 musicRouter
   .route("/tooglePublic")
   .post(verifyUser, musicController.togglePublic);
-
-const io = require("socket.io")(3002, {
-  cors: {
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST"],
-  },
-});
-// io.on("connection", (socket) => {
-//   const user = socket.handshake.query.userEmail;
-//   const uid = socket.handshake.query.uid;
-//   socket.join(user);
-//   socket.on("shared", (data) => {
-//     io.to(user).emit("shared-song", data);
-//   });
-//   socket.on("disconnect", () => {
-//     socket.leave(user);
-//   });
-// });
 
 const userRooms = {};
 

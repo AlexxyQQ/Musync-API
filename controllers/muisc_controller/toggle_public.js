@@ -6,9 +6,6 @@ async function makePublic(req, res, next) {
     const songId = req.body.songId;
     const toggleValue = req.body.toggleValue;
 
-    console.log(songId);
-    console.log(toggleValue);
-
     // Find the song in the database
     const song = await Song.findOne({ id: songId });
 
@@ -24,7 +21,6 @@ async function makePublic(req, res, next) {
       // Save the song
       await song.save();
       // Return a success message
-      console.log(song.isPublic);
       return res.status(200).json({
         success: true,
         message: `Song is now ${toggleValue == true ? "public" : "private"}`,
