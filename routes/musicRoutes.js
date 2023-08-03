@@ -64,6 +64,8 @@ io.on("connection", (socket) => {
   const userEmail = socket.handshake.query.userEmail;
   const uid = socket.handshake.query.uid;
 
+  console.log("user connected", userEmail, uid);
+
   // Create or join the room for the userEmail
   socket.join(userEmail);
 
@@ -75,6 +77,7 @@ io.on("connection", (socket) => {
   }
 
   socket.on("shared", (data) => {
+    console.log("shared", data);
     // Broadcast the data to all sockets in the userEmail room except the one with the same uid
     const socketsInRoom = userRooms[userEmail];
     for (const roomSocket of socketsInRoom) {
