@@ -58,6 +58,8 @@ musicRouter
   .route("/tooglePublic")
   .post(verifyUser, musicController.togglePublic);
 
+musicRouter.route("/deleteSong").post(musicController.deleteSong);
+
 const userRooms = {};
 
 io.on("connection", (socket) => {

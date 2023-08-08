@@ -9,5 +9,10 @@ userRouter.route("/login").post(user_controller.user_login);
 userRouter
   .route("/loginWithToken")
   .get(verifyUser, user_controller.user_token_login);
+userRouter
+  .route("/uploadProfilePic")
+  .post(verifyUser, user_controller.uploadProfilePic);
+
+userRouter.route("/deleteUser").post(verifyUser, user_controller.deleteUser);
 
 module.exports = userRouter;

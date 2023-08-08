@@ -61,7 +61,6 @@ describe("Get All Song Test", () => {
       .set("apisecret", "Apple")
       .set("Authorization", "Bearer " + token);
 
-    console.log(response.body.data);
     expect(response.statusCode).toBe(200);
     expect(response.body.data.length).toBe(0);
   });

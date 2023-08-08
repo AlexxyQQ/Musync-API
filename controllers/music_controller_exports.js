@@ -14,6 +14,7 @@ const addToPlaylist = require("../controllers/muisc_controller/add_to_playlist")
 const createPlaylist = require("../controllers/muisc_controller/create_playlist");
 const getPlaylists = require("../controllers/muisc_controller/get_playlists");
 const togglePublic = require("../controllers/muisc_controller/toggle_public");
+const deleteSong = require("../controllers/muisc_controller/delete_song");
 
 module.exports = {
   uploadAlbumArt,
@@ -32,4 +33,5 @@ module.exports = {
   createPlaylist,
   getPlaylists,
   togglePublic,
+  deleteSong,
 };
