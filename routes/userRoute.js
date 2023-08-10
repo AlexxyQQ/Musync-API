@@ -14,5 +14,9 @@ userRouter
   .post(verifyUser, user_controller.uploadProfilePic);
 
 userRouter.route("/deleteUser").post(verifyUser, user_controller.deleteUser);
+userRouter
+  .route("/getListofUsers")
+  .get(verifyUser, user_controller.listofUsers);
+userRouter.route("/getUserData").post(verifyUser, user_controller.userData);
 
 module.exports = userRouter;

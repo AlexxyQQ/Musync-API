@@ -4,6 +4,12 @@ async function deleteSong(req, res, next) {
   try {
     const { songId } = req.body;
 
+    if (!songId) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide a songId",
+      });
+    }
     // Check if the song exists in the database
     const existingSong = await Songs.findOne({ id: songId });
     if (!existingSong) {
@@ -11,7 +17,6 @@ async function deleteSong(req, res, next) {
         success: true,
         message: "Song not found in database",
       });
-      d;
     }
 
     // Delete the song with the given songId
@@ -22,6 +27,7 @@ async function deleteSong(req, res, next) {
     return res.status(200).json({
       success: true,
       message: "Song deleted successfully",
+      newSong: await Songs.find({}),
     });
   } catch (error) {
     return res.status(400).json({

@@ -1,4 +1,5 @@
 const getAllPublicSongs = require("../controllers/muisc_controller/get_all_public_songs");
+const getUserPublicSongs = require("../controllers/muisc_controller/get_user_public_songs");
 const getAllSongs = require("../controllers/muisc_controller/get_all_songs");
 const addAllSongs = require("../controllers/muisc_controller/add_all_songs");
 const getAllFolderWithSongs = require("./muisc_controller/get_all_folder_with_songs");
@@ -34,4 +35,5 @@ module.exports = {
   getPlaylists,
   togglePublic,
   deleteSong,
+  getUserPublicSongs,
 };

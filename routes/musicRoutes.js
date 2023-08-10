@@ -15,6 +15,9 @@ musicRouter.route("/addAllSongs").post(verifyUser, musicController.addAllSongs);
 musicRouter.route("/getAllSongs").get(verifyUser, musicController.getAllSongs);
 
 musicRouter.route("/getAllPublicSongs").get(musicController.getAllPublicSongs);
+musicRouter
+  .route("/getUserPublicSongs")
+  .get(verifyUser, musicController.getUserPublicSongs);
 
 // All Folders
 musicRouter

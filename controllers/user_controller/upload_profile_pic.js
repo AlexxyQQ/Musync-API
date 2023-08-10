@@ -17,7 +17,7 @@ async function uploadProfilePic(req, res) {
     }
     try {
       const file = req.file;
-      console.log(req);
+      console.log(file);
       if (!file) {
         return res.status(400).json({
           success: false,
