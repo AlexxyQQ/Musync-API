@@ -31,6 +31,10 @@ const songSchema = new mongoose.Schema({
   albumArt: { type: String },
   albumArtUrl: { type: String },
   isPublic: { type: Boolean, default: false },
+  lyrics: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Lyrics",
+  },
 });
 
 const song = mongoose.model("Songs", songSchema);
