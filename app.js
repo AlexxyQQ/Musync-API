@@ -7,7 +7,7 @@ const cors = require("cors");
 
 require("dotenv").config();
 
-const userRoutes = require("./routes/userRoute");
+const userRoutes = require("./routes/user_route");
 const musicRouter = require("./routes/musicRoutes");
 const verify = require("./middlewares/verify_token");
 

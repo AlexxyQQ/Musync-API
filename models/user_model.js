@@ -52,6 +52,14 @@ const userSchema = new mongoose.Schema({
     enum: ["manual", "google"],
     default: "manual",
   },
+  otp: {
+    type: String,
+    default: null,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 const user = mongoose.model("Users", userSchema);

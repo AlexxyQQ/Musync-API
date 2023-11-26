@@ -3,7 +3,7 @@ const path = require("path");
 const fs = require("fs");
 const crypto = require("crypto"); // Added crypto module for generating random filenames
 const upload = multer({ dest: "public/uploads/" });
-const User = require("../../models/userModel");
+const User = require("../../models/user_model");
 
 async function uploadProfilePic(req, res) {
   const user_data = res.locals.user;
@@ -73,6 +73,8 @@ async function uploadProfilePic(req, res) {
       });
       loggedUser.profilePic = filePath;
       await loggedUser.save();
+
+      loggedUser.password = undefined;
 
       return res.status(200).json({
         success: true,

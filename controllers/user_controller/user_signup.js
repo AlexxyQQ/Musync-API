@@ -1,7 +1,10 @@
-const User = require("../../models/userModel");
+const User = require("../../models/user_model");
 const bcryptjs = require("bcryptjs");
+const sendEmail = require("../common/send_email");
+const generateOTP = require("../common/otp_generator");
 
 async function signup(req, res) {
+  console.log("Signup route hit");
   try {
     const { username, email, password, confirmPassword, type } = req.body;
     let errorMessage = "";
@@ -32,31 +35,60 @@ async function signup(req, res) {
 
     const hashedPassword = await bcryptjs.hash(password, 12);
     if (req.body.profilePic) {
+      const sixDigitOTP = generateOTP();
       let user = new User({
         username,
         email,
         password: hashedPassword,
         type,
         profilePic: req.body.profilePic,
+        otp: sixDigitOTP,
       });
+      await sendEmail(
+        email, // Recipient's email address
+        "OTP for Rantit", // Email subject
+        `The OTP for your email is ${sixDigitOTP}.` // Plain text body
+      );
       user = await user.save();
       res.status(200).json({
         success: true,
-        data: user,
-        message: "User created successfully!",
+        data: {
+          _id: user._id,
+          username: user.username,
+          email: user.email,
+          profilePic: user.profilePic,
+          verified: user.verified,
+          type: user.type,
+        },
+        message: "OTP sent to your email please verify!",
       });
     } else {
+      const sixDigitOTP = generateOTP();
+
       let user = new User({
         username,
         email,
         password: hashedPassword,
         type,
+        otp: sixDigitOTP,
       });
+      await sendEmail(
+        email, // Recipient's email address
+        "OTP for Rantit", // Email subject
+        `The OTP for your email is ${sixDigitOTP}.` // Plain text body
+      );
       user = await user.save();
       res.status(200).json({
         success: true,
-        data: user,
-        message: "User created successfully!",
+        data: {
+          _id: user._id,
+          username: user.username,
+          email: user.email,
+          profilePic: user.profilePic,
+          verified: user.verified,
+          type: user.type,
+        },
+        message: "OTP sent to your email please verify!",
       });
     }
   } catch (err) {

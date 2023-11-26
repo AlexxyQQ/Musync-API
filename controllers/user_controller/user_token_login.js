@@ -1,4 +1,4 @@
-const User = require("../../models/userModel");
+const User = require("../../models/user_model");
 
 async function loginWithToken(req, res) {
   try {
@@ -9,6 +9,9 @@ async function loginWithToken(req, res) {
         message: "Token Expired",
       });
     } else {
+      // remove password and otp from user object
+      user.password = undefined;
+      user.otp = undefined;
       res.json({
         success: true,
         data: {

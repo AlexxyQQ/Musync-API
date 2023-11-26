@@ -1,5 +1,4 @@
-const User = require("../../models/userModel");
-const Song = require("../../models/songModel");
+const User = require("../../models/user_model");
 
 async function userData(req, res) {
   try {
