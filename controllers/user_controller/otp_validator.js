@@ -18,7 +18,6 @@ async function singupOTPValidator(req, res) {
         existingUserEmail.verified = true;
         existingUserEmail.otp = null;
         await existingUserEmail.save();
-
         return res.status(200).json({
           success: true,
           message: "OTP verified successfully!",

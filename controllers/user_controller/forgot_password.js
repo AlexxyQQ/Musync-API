@@ -3,7 +3,7 @@ const bcryptjs = require("bcryptjs");
 const generateOTP = require("../common/otp_generator");
 const sendEmail = require("../common/send_email");
 
-async function forgotPasswordOTP(req, res) {
+async function sendforgotPasswordOTP(req, res) {
   try {
     const { email } = req.body;
     // Check if email is provided
@@ -44,10 +44,9 @@ async function forgotPasswordOTP(req, res) {
     res.status(400).json({ success: false, message: err.message });
   }
 }
-async function forgotPassword(req, res) {
+async function changePassword(req, res) {
   try {
-    const { email, otp, newPassword } = req.body;
-    // Check if email is provided
+    const { email, newPassword, confirmNewPassword, otp } = req.body;
     if (!email) {
       return res
         .status(400)
@@ -60,24 +59,30 @@ async function forgotPassword(req, res) {
         .status(400)
         .json({ success: false, message: "User does not exist!" });
     }
-    // Check if OTP is provided
-    if (!otp) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Please provide OTP!" });
-    }
 
-    // Check if OTP is correct
-    if (exist.otp !== otp) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Incorrect OTP!" });
-    }
     // Check if new password is provided
     if (!newPassword) {
       return res
         .status(400)
         .json({ success: false, message: "Please provide a new password!" });
+    }
+    if (!confirmNewPassword) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Please confirm your new password!" });
+    }
+    if (newPassword !== confirmNewPassword) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Passwords do not match!" });
+    }
+    console.log(exist.otp.toString(), otp.toString());
+    console.log(exist.otp.toString() == otp.toString());
+    if (exist.otp.toString() != otp.toString()) {
+      return res.status(400).json({
+        success: false,
+        message: "Please request for OTP first!",
+      });
     }
     // Update password
     const hashedPassword = await bcryptjs.hash(newPassword, 12);
@@ -101,4 +106,7 @@ async function forgotPassword(req, res) {
   }
 }
 
-module.exports = { forgotPasswordOTP, forgotPassword };
+module.exports = {
+  sendforgotPasswordOTP,
+  changePassword,
+};

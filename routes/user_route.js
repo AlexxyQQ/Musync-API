@@ -18,12 +18,13 @@ userRouter
   .route("/getListofUsers")
   .get(verifyUser, user_controller.list_of_users);
 userRouter.route("/getUserData").post(verifyUser, user_controller.user_data);
+userRouter.route("/otpValidator").post(user_controller.otp_validator);
 userRouter
-  .route("/otpValidator")
-  .post(user_controller.user_signup_otp_validator);
+  .route("/sendForgotPasswordOTP")
+  .post(user_controller.send_forgot_password_opt);
+userRouter.route("/changePassword").post(user_controller.change_password);
 userRouter
-  .route("/forgotPasswordOTP")
-  .post(user_controller.forgot_password_opt);
-userRouter.route("/forgotPassword").post(user_controller.forgot_password);
+  .route("/resendVerification")
+  .post(verifyUser, user_controller.resend_verification);
 
 module.exports = userRouter;
