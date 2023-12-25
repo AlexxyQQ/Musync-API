@@ -46,7 +46,7 @@ async function sendforgotPasswordOTP(req, res) {
 }
 async function changePassword(req, res) {
   try {
-    const { email, newPassword, confirmNewPassword, otp } = req.body;
+    const { email, new_password, confirm_new_password, otp } = req.body;
     if (!email) {
       return res
         .status(400)
@@ -61,17 +61,17 @@ async function changePassword(req, res) {
     }
 
     // Check if new password is provided
-    if (!newPassword) {
+    if (!new_password) {
       return res
         .status(400)
         .json({ success: false, message: "Please provide a new password!" });
     }
-    if (!confirmNewPassword) {
+    if (!confirm_new_password) {
       return res
         .status(400)
         .json({ success: false, message: "Please confirm your new password!" });
     }
-    if (newPassword !== confirmNewPassword) {
+    if (new_password !== confirm_new_password) {
       return res
         .status(400)
         .json({ success: false, message: "Passwords do not match!" });
@@ -85,7 +85,7 @@ async function changePassword(req, res) {
       });
     }
     // Update password
-    const hashedPassword = await bcryptjs.hash(newPassword, 12);
+    const hashedPassword = await bcryptjs.hash(new_password, 12);
     exist.password = hashedPassword;
     exist.otp = undefined;
     await exist.save();

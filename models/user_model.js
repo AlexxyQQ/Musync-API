@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema({
         "Password must contain at least 8 characters, 1 uppercase letter, 1 number and 1 special character",
     },
   },
-  profilePic: {
+  profile_pic: {
     type: String,
     default: "https://i.imgur.com/Eyzrkg3.jpeg",
   },
@@ -56,7 +56,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
-  createdAt: {
+  created_at: {
     type: Date,
     default: Date.now,
   },

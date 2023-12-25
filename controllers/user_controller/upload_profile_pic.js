@@ -7,7 +7,7 @@ const User = require("../../models/user_model");
 
 async function uploadProfilePic(req, res) {
   const user_data = res.locals.user;
-  upload.single("profilePic")(req, res, async (err) => {
+  upload.single("profile_pic")(req, res, async (err) => {
     if (err) {
       console.error(err);
       return res.status(400).json({
@@ -29,7 +29,7 @@ async function uploadProfilePic(req, res) {
       var uploadPathTemp = path.join(
         folderPath,
         user_data["username"],
-        "profilePic"
+        "profile_pic"
       );
 
       if (!fs.existsSync(uploadPathTemp)) {
@@ -71,7 +71,7 @@ async function uploadProfilePic(req, res) {
       const loggedUser = await User.findOne({
         username: user_data["username"],
       });
-      loggedUser.profilePic = filePath;
+      loggedUser.profile_pic = filePath;
       await loggedUser.save();
 
       loggedUser.password = undefined;

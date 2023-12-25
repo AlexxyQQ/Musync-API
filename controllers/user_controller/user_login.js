@@ -33,7 +33,7 @@ async function login(req, res) {
         id: user._id,
         username: user.username,
         type: user.type,
-        profilePic: user.profilePic,
+        profile_pic: user.profilePic,
         email: user.email,
       },
       process.env.JWT_SECRET,
