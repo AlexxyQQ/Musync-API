@@ -4,16 +4,16 @@ const playlistSchema = new mongoose.Schema({
   id: { type: String, required: true },
   playlist: { type: String, required: true },
   data: { type: String },
-  dateAdded: { type: Number },
-  numOfSongs: { type: Number, required: true },
-  dateModified: { type: Number },
-  playlistSongs: [
+  date_added: { type: Number },
+  num_of_songs: { type: Number, required: true },
+  date_modified: { type: Number },
+  playlist_songs: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Songs",
     },
   ],
-  playlistUser: {
+  playlist_user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Users",
   },
