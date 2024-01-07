@@ -1,5 +1,6 @@
 const axios = require("axios");
-const Song = require("../../models/song.model");
+const Song = require("../../../models/song.model");
+const lyrics = require("../../../models/lyrics.model");
 
 async function getLyric(req, res, next) {
   try {
@@ -36,6 +37,16 @@ async function getLyric(req, res, next) {
         if (response.data.message.body.lyrics) {
           // Extract the lyrics from the response
           const lyrics = response.data.message.body.lyrics.lyrics_body;
+          // save lyrics to database
+
+          const newLyrics = new lyrics({
+            timed: false,
+            timestamps: lyrics,
+            song: song_id,
+          });
+
+          await newLyrics.save();
+
           res.status(200).json({
             success: true,
             data: {

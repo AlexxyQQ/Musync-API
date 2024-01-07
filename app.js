@@ -1,20 +1,24 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
-const path = require("path");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const path = require("path");
 
 require("dotenv").config();
 
+// Routes
 const userRoutes = require("./routes/user.route");
 const musicRouter = require("./routes/music.routes");
+
+// Middleware
 const { verifyAPIReq } = require("./middlewares/verify_token.mid");
 
-const app = express(); // create express app
-app.use(cors({ origin: true }));
+// Express App Initialization
+const app = express();
 
-var db_URI =
+// Database Connection
+const db_URI =
   process.env.NODE_ENV === "test"
     ? process.env.TEST_DATABASE
     : process.env.PRO_DATABASE;
@@ -24,20 +28,25 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => console.log("Database connection successfull"))
-  .catch((err) => console.log(err));
+  .then(() => console.log("Database connection successful"))
+  .catch((err) => console.error("Database connection error:", err));
 
+// Middleware Setup
+app.use(cors({ origin: true }));
 app.use(express.json());
-
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Static Files
 app.use(express.static(path.join(__dirname, "/")));
 
-// Dev logging middleware
+// Logging Middleware for Development Environment
 if (process.env.NODE_ENV === "dev") {
   app.use(morgan("dev"));
 }
-module.exports = app; // export app
 
-// Routes
+// API Routes
 app.use("/api/users", verifyAPIReq, userRoutes);
 app.use("/api/music", verifyAPIReq, musicRouter);
+
+// Export Express App
+module.exports = app;

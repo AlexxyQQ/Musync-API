@@ -8,74 +8,15 @@ const musicRouter = express.Router();
 // ---------------------
 // Lyric Management
 // ---------------------
-musicRouter.route("/getlyric").post(verifyUser, musicController.getLyric);
-
-// ---------------------
-// Album Management
-// ---------------------
-musicRouter
-  .route("/uploadAlbumArt")
-  .post(verifyUser, musicController.uploadAlbumArt);
-musicRouter.route("/addAlbums").post(verifyUser, musicController.addAlbums);
-musicRouter
-  .route("/getAllAlbums")
-  .get(verifyUser, musicController.getAllAlbums);
-musicRouter
-  .route("/getAllAlbumWithSongs")
-  .get(verifyUser, musicController.getAllAlbumWithSongs);
+musicRouter.route("/getLyrics").post(verifyUser, musicController.getLyrics);
 
 // ---------------------
 // Song Management
 // ---------------------
-musicRouter.route("/addAllSongs").post(verifyUser, musicController.addAllSongs);
+musicRouter.route("/addSong").post(verifyUser, musicController.addSong);
+musicRouter.route("/addSongs").post(verifyUser, musicController.addSongs);
 musicRouter.route("/getAllSongs").get(verifyUser, musicController.getAllSongs);
-musicRouter.route("/getAllPublicSongs").get(musicController.getAllPublicSongs);
-musicRouter
-  .route("/getUserPublicSongs")
-  .get(verifyUser, musicController.getUserPublicSongs);
-musicRouter.route("/deleteSong").post(musicController.deleteSong);
-
-// ---------------------
-// Folder Management
-// ---------------------
-musicRouter
-  .route("/getAllFolderWithSongs")
-  .get(verifyUser, musicController.getAllFolderWithSongs);
-musicRouter
-  .route("/getAllFolders")
-  .get(verifyUser, musicController.getAllFolders);
-musicRouter
-  .route("/getFolderSongs")
-  .post(verifyUser, musicController.getFolderSongs);
-musicRouter.route("/addFolders").post(verifyUser, musicController.addFolders);
-
-// ---------------------
-// Artist Management
-// ---------------------
-musicRouter
-  .route("/getAllArtistWithSongs")
-  .get(verifyUser, musicController.getAllArtistWithSongs);
-
-// ---------------------
-// Playlist Management
-// ---------------------
-musicRouter
-  .route("/addToPlaylist")
-  .post(verifyUser, musicController.addToPlaylist);
-musicRouter
-  .route("/createPlaylist")
-  .get(verifyUser, musicController.createPlaylist);
-musicRouter
-  .route("/getPlaylists")
-  .get(verifyUser, musicController.getPlaylists);
-
-// ---------------------
-// Public/Private Toggling
-// ---------------------
-musicRouter
-  .route("/tooglePublic")
-  .post(verifyUser, musicController.togglePublic);
-
+musicRouter.route("/deleteSong").post(verifyUser, musicController.deleteSong);
 // ---------------------
 // Socket.IO Integration
 // ---------------------

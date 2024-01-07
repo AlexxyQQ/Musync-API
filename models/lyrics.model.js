@@ -6,13 +6,8 @@ const lyricsSchema = new mongoose.Schema({
     required: true,
   },
   timestamps: {
-    type: {
-      type: String,
-      enum: ["String"],
-      default: "String",
-    },
-    required: true,
-    default: {},
+    type: String,
+    required: false,
   },
   song: [
     {
@@ -22,6 +17,6 @@ const lyricsSchema = new mongoose.Schema({
   ],
 });
 
-const lyricsModel = mongoose.model("Lyrics", messageSchema);
+const lyricsModel = mongoose.model("Lyrics", lyricsSchema);
 
 module.exports = lyricsModel;

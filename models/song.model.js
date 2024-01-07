@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 
 const songSchema = new mongoose.Schema({
   id: { type: Number, required: true, unique: true },
-  server_url: { type: String, required: true, unique: true },
   data: { type: String },
   uri: { type: String },
   display_name: { type: String },
@@ -29,8 +28,7 @@ const songSchema = new mongoose.Schema({
   is_podcast: { type: Boolean },
   is_ringtone: { type: Boolean },
   album_art: { type: String },
-  album_art_url: { type: String },
-  is_public: { type: Boolean, default: false },
+  is_favourite: { type: Boolean, default: false },
   lyrics: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Lyrics",

@@ -1,4 +1,4 @@
-const Songs = require("../../models/song.model");
+const Songs = require("../../../models/song.model");
 
 async function deleteSong(req, res, next) {
   try {
@@ -10,24 +10,21 @@ async function deleteSong(req, res, next) {
         message: "Please provide a songId",
       });
     }
-    // Check if the song exists in the database
-    const existingSong = await Songs.findOne({ id: songId });
-    if (!existingSong) {
-      return res.status(200).json({
-        success: true,
-        message: "Song not found in database",
+    // check if song exists
+    const song = await Songs.findById(songId);
+
+    if (!song) {
+      return res.status(404).json({
+        success: false,
+        message: "Song not found",
       });
     }
 
-    // Delete the song with the given songId
-    await Songs.findOneAndDelete({
-      id: songId,
-    });
+    await Songs.findByIdAndDelete(songId);
 
     return res.status(200).json({
       success: true,
-      message: "Song deleted successfully",
-      newSong: await Songs.find({}),
+      message: "Successfully deleted song",
     });
   } catch (error) {
     return res.status(400).json({
