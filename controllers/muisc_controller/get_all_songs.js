@@ -1,6 +1,6 @@
 const fs = require("fs");
 const multer = require("multer");
-const Song = require("../../models/songModel");
+const Song = require("../../models/song.model");
 const { findMP3Files } = require("./common/find_song");
 
 async function getAllSongs(req, res, next) {

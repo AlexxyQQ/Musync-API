@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const Song = require("../../../models/songModel");
+const Song = require("../../../models/song.model");
 
 async function findMP3Files(directoryPath) {
   const mp3Files = [];

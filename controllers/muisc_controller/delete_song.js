@@ -1,4 +1,4 @@
-const Songs = require("../../models/songModel");
+const Songs = require("../../models/song.model");
 
 async function deleteSong(req, res, next) {
   try {

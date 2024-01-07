@@ -1,7 +1,7 @@
-const User = require("../../models/user_model");
+const User = require("../../../models/user.model");
 const bcryptjs = require("bcryptjs");
-const sendEmail = require("../common/send_email");
-const generateOTP = require("../common/otp_generator");
+const sendEmail = require("../../common/send_email");
+const generateOTP = require("../../common/otp_generator");
 
 async function signup(req, res) {
   console.log("Signup route hit");

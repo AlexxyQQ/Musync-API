@@ -1,7 +1,7 @@
-const User = require("../../models/user_model");
+const User = require("../../../models/user.model");
 const bcryptjs = require("bcryptjs");
-const generateOTP = require("../common/otp_generator");
-const sendEmail = require("../common/send_email");
+const generateOTP = require("../../common/otp_generator");
+const sendEmail = require("../../common/send_email");
 
 async function sendforgotPasswordOTP(req, res) {
   try {

@@ -7,9 +7,9 @@ const cors = require("cors");
 
 require("dotenv").config();
 
-const userRoutes = require("./routes/user_route");
-const musicRouter = require("./routes/musicRoutes");
-const verify = require("./middlewares/verify_token");
+const userRoutes = require("./routes/user.route");
+const musicRouter = require("./routes/music.routes");
+const { verifyAPIReq } = require("./middlewares/verify_token.mid");
 
 const app = express(); // create express app
 app.use(cors({ origin: true }));
@@ -39,5 +39,5 @@ if (process.env.NODE_ENV === "dev") {
 module.exports = app; // export app
 
 // Routes
-app.use("/api/users", verify.verifyAPIReq, userRoutes);
-app.use("/api/music", verify.verifyAPIReq, musicRouter);
+app.use("/api/users", verifyAPIReq, userRoutes);
+app.use("/api/music", verifyAPIReq, musicRouter);

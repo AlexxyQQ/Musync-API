@@ -22,6 +22,6 @@ const lyricsSchema = new mongoose.Schema({
   ],
 });
 
-const Lyrics = mongoose.model("Lyrics", messageSchema);
+const lyricsModel = mongoose.model("Lyrics", messageSchema);
 
-module.exports = Lyrics;
+module.exports = lyricsModel;

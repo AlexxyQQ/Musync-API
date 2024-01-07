@@ -1,7 +1,7 @@
 const fs = require("fs");
 const multer = require("multer");
 const path = require("path");
-const Song = require("../../models/songModel");
+const Song = require("../../models/song.model");
 const upload = multer({ dest: "public/uploads/" });
 
 function addAllSongs(req, res, next) {

@@ -1,5 +1,5 @@
 const fs = require("fs");
-const Song = require("../../models/songModel");
+const Song = require("../../models/song.model");
 
 async function getAllAlbumWithSongs(req, res, next) {
   try {

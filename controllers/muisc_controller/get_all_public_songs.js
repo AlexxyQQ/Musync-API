@@ -1,4 +1,4 @@
-const Song = require("../../models/songModel");
+const Song = require("../../models/song.model");
 
 async function getAllPublicSongs(req, res, next) {
   try {
