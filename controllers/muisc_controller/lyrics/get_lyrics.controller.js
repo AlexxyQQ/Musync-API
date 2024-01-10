@@ -1,6 +1,7 @@
 const axios = require("axios");
 const Song = require("../../../models/song.model");
 const lyricsModel = require("../../../models/lyrics.model");
+const mongoose = require("mongoose");
 
 async function getLyric(req, res, next) {
   try {
@@ -39,23 +40,35 @@ async function getLyric(req, res, next) {
         if (response.data.message.body.lyrics) {
           // Extract the lyrics from the response
           const lyrics = response.data.message.body.lyrics.lyrics_body;
-          // save lyrics to database
+          function removeAfterAsterisk(input) {
+            const asteriskPosition = input.indexOf("*");
+            if (asteriskPosition !== -1) {
+              return input.substring(0, asteriskPosition);
+            } else {
+              return input; // If there's no asterisk, return the original string
+            }
+          }
+
+          // Remove the last part of the lyrics
+          const newText = removeAfterAsterisk(lyrics);
+          const song = await Song.findOne({ id: song_id });
+
+          // Save lyrics to database
           const newLyrics = new lyricsModel({
             timed: false,
-            timestamps: lyrics,
-            song: song_id,
+            timestamps: newText,
+            song: song._id,
           });
           await newLyrics.save();
 
-          // add lyrics to song
-          const song = await Song.findById(song_id);
+          // Add lyrics to song
           song.lyrics = newLyrics._id;
           await song.save();
 
           res.status(200).json({
             success: true,
             data: {
-              lyrics: lyrics,
+              lyrics: newText,
               song_id: song_id,
               song_title: song_title,
               song_artist: song_artist,
