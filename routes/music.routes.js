@@ -18,6 +18,24 @@ musicRouter.route("/addSongs").post(verifyUser, musicController.addSongs);
 musicRouter.route("/getAllSongs").get(verifyUser, musicController.getAllSongs);
 musicRouter.route("/deleteSong").post(verifyUser, musicController.deleteSong);
 musicRouter.route("/updateSong").post(verifyUser, musicController.updateSong);
+
+// ---------------------
+// Album Management
+// ---------------------
+musicRouter.route("/addAlbums").post(verifyUser, musicController.addAlbums);
+musicRouter
+  .route("/getAllAlbums")
+  .get(verifyUser, musicController.getAllAlbums);
+
+musicRouter.route("/deleteAlbum").post(verifyUser, musicController.deleteAlbum);
+
+// ---------------------
+// Artists Management
+// ---------------------
+musicRouter
+  .route("/getAllArtists")
+  .get(verifyUser, musicController.getAllArtists);
+
 // ---------------------
 // Socket.IO Integration
 // ---------------------
